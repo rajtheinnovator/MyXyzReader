@@ -1,12 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="me.abhishekraj.myxyzreader"
-    android:versionCode="1"
-    android:versionName="1.0">
+    package="me.abhishekraj.myxyzreader">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!--Icon generated from the @link: https://romannurik.github.io/AndroidAssetStudio/icons-launcher.html-->
 
     <application
         android:allowBackup="true"

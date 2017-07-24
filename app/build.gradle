@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.3"
     defaultConfig {
         applicationId "me.abhishekraj.myxyzreader"
-        minSdkVersion 20
+        minSdkVersion 21
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -29,4 +29,5 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.1.2'
     compile files('libs/volley.jar')
     compile 'com.android.support:design:25.0.0'
+    compile 'com.ms-square:expandableTextView:0.1.4'
 }

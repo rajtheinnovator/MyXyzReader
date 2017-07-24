@@ -10,8 +10,10 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -31,6 +33,7 @@ import me.abhishekraj.myxyzreader.R;
 import me.abhishekraj.myxyzreader.data.ArticleLoader;
 import me.abhishekraj.myxyzreader.data.ItemsContract;
 import me.abhishekraj.myxyzreader.data.UpdaterService;
+import me.abhishekraj.myxyzreader.remote.ServiceManager;
 
 /**
  * An activity representing a list of Articles. This activity has different presentations for
@@ -38,7 +41,7 @@ import me.abhishekraj.myxyzreader.data.UpdaterService;
  * touched, lead to a {@link ArticleDetailActivity} representing item details. On tablets, the
  * activity presents a grid of items as cards.
  */
-public class ArticleListActivity extends ActionBarActivity implements
+public class ArticleListActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = ArticleListActivity.class.toString();
@@ -47,6 +50,8 @@ public class ArticleListActivity extends ActionBarActivity implements
     private RecyclerView mRecyclerView;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private AppBarLayout mAppBarLayout;
+
+    private CoordinatorLayout mCoordinatorLayout;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
     // Use default locale format
@@ -59,6 +64,7 @@ public class ArticleListActivity extends ActionBarActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_list);
 
+        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         this.setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle(null);
@@ -102,10 +108,38 @@ public class ArticleListActivity extends ActionBarActivity implements
         public void onReceive(Context context, Intent intent) {
             if (UpdaterService.BROADCAST_ACTION_STATE_CHANGE.equals(intent.getAction())) {
                 mIsRefreshing = intent.getBooleanExtra(UpdaterService.EXTRA_REFRESHING, false);
+
+                /*
+                * internet connectivity code referenced from
+                * the @link: https://stackoverflow.com/a/26114247/5770629
+                * */
+                if(!checkInternet(context))
+                {
+                    /*
+                    * snackbar code referenced from
+                     * the @link: https://www.androidhive.info/2015/09/android-material-design-snackbar-example/
+                    * */
+                    Snackbar snackbar = Snackbar
+                            .make(mCoordinatorLayout, getResources().getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG);
+
+                    snackbar.show();
+                }
+
+
                 updateRefreshingUI();
+
             }
         }
     };
+
+    boolean checkInternet(Context context) {
+        ServiceManager serviceManager = new ServiceManager(context);
+        if (serviceManager.isNetworkAvailable()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     private void updateRefreshingUI() {
         mSwipeRefreshLayout.setRefreshing(mIsRefreshing);
@@ -122,9 +156,9 @@ public class ArticleListActivity extends ActionBarActivity implements
         adapter.setHasStableIds(true);
         mRecyclerView.setAdapter(adapter);
         int columnCount = getResources().getInteger(R.integer.list_column_count);
-        GridLayoutManager sglm =
+        GridLayoutManager glm =
                 new GridLayoutManager(this, columnCount);
-        mRecyclerView.setLayoutManager(sglm);
+        mRecyclerView.setLayoutManager(glm);
     }
 
     @Override

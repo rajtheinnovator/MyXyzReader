@@ -50,8 +50,8 @@ public class ArticleDetailFragment extends Fragment implements
     private long mItemId;
     private View mRootView;
     private int mMutedColor = 0xFF333333;
-    private me.abhishekraj.myxyzreader.ui.ObservableScrollView mScrollView;
-    private me.abhishekraj.myxyzreader.ui.DrawInsetsFrameLayout mDrawInsetsFrameLayout;
+    private ObservableScrollView mScrollView;
+    private DrawInsetsFrameLayout mDrawInsetsFrameLayout;
     private ColorDrawable mStatusBarColorDrawable;
 
     private int mTopInset;
@@ -60,6 +60,8 @@ public class ArticleDetailFragment extends Fragment implements
     private int mScrollY;
     private boolean mIsCard = false;
     private int mStatusBarFullOpacityBottom;
+
+    private TextView mBodyTextView;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
     // Use default locale format
@@ -96,8 +98,8 @@ public class ArticleDetailFragment extends Fragment implements
         setHasOptionsMenu(true);
     }
 
-    public ArticleDetailActivity getActivityCast() {
-        return (ArticleDetailActivity) getActivity();
+    public me.abhishekraj.myxyzreader.ui.ArticleDetailActivity getActivityCast() {
+        return (me.abhishekraj.myxyzreader.ui.ArticleDetailActivity) getActivity();
     }
 
     @Override
@@ -115,17 +117,18 @@ public class ArticleDetailFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
-        mDrawInsetsFrameLayout = (me.abhishekraj.myxyzreader.ui.DrawInsetsFrameLayout)
+        mBodyTextView = (TextView)mRootView.findViewById(R.id.article_body);
+        mDrawInsetsFrameLayout = (DrawInsetsFrameLayout)
                 mRootView.findViewById(R.id.draw_insets_frame_layout);
-        mDrawInsetsFrameLayout.setOnInsetsCallback(new me.abhishekraj.myxyzreader.ui.DrawInsetsFrameLayout.OnInsetsCallback() {
+        mDrawInsetsFrameLayout.setOnInsetsCallback(new DrawInsetsFrameLayout.OnInsetsCallback() {
             @Override
             public void onInsetsChanged(Rect insets) {
                 mTopInset = insets.top;
             }
         });
 
-        mScrollView = (me.abhishekraj.myxyzreader.ui.ObservableScrollView) mRootView.findViewById(R.id.scrollview);
-        mScrollView.setCallbacks(new me.abhishekraj.myxyzreader.ui.ObservableScrollView.Callbacks() {
+        mScrollView = (ObservableScrollView) mRootView.findViewById(R.id.scrollview);
+        mScrollView.setCallbacks(new ObservableScrollView.Callbacks() {
             @Override
             public void onScrollChanged() {
                 mScrollY = mScrollView.getScrollY();
@@ -233,7 +236,11 @@ public class ArticleDetailFragment extends Fragment implements
 
             }
             bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY).replaceAll("(\r\n|\n)", "<br />")));
-            me.abhishekraj.myxyzreader.ui.ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
+            /*
+            * line below referenced from the @link: https://stackoverflow.com/a/4602929/5770629
+            * */
+            mBodyTextView.setTextColor(mMutedColor);
+            ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
                     .get(mCursor.getString(ArticleLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
                         @Override
                         public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
