@@ -86,15 +86,15 @@
                     android:layout_marginRight="@dimen/detail_inner_horiz_margin"
                     android:lineSpacingMultiplier="@fraction/detail_body_line_spacing_multiplier"
                     android:paddingBottom="@dimen/detail_body_bottom_margin"
-                    android:textColor="@color/body_TextColor"
-                    android:textColorLink="@color/color_Link"
+                    android:textColor="@color/bodyTextColor"
+                    android:textColorLink="@color/colorLink"
                     android:textSize="@dimen/detail_body_text_size" />
 
             </me.abhishekraj.myxyzreader.ui.MaxWidthLinearLayout>
         </FrameLayout>
     </me.abhishekraj.myxyzreader.ui.ObservableScrollView>
 
-    <ImageButton
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/share_fab"
         android:layout_width="@dimen/image_button_height"
         android:layout_height="@dimen/image_button_width"

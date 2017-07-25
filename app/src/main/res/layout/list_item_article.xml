@@ -13,7 +13,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/card_view_linear_layout_background"
+        android:background="@color/colorCardViewLinearLayoutBackground"
         android:fitsSystemWindows="true"
         android:orientation="vertical">
 
@@ -31,7 +31,7 @@
             style="@style/TextAppearance.AppCompat.Subhead"
             android:layout_width="match_parent"
             android:layout_height="@dimen/article_title_text_view_height"
-            android:background="@color/theme_primary_dark"
+            android:background="@color/colorPrimaryDark"
             android:ellipsize="end"
             android:maxLines="4"
             android:paddingBottom="4dp"
